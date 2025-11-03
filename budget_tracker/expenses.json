@@ -1,0 +1,12 @@
+[
+    {
+        "category": "Fun",
+        "amount": 300.0,
+        "description": "Money for fun"
+    },
+    {
+        "category": "Food",
+        "amount": 200.0,
+        "description": "Money for food"
+    }
+]
