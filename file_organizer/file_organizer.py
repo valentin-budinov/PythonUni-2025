@@ -4,18 +4,37 @@ path = r"C:/Users/User/Documents/File_Organizer_Test/"
 
 file_names = os.listdir(path)
 
-folder_names = ['docx files', 'text files', 'xlsx files']
-
-for folder_name in folder_names:
-    if not os.path.exists(path + folder_name):
-        os.makedirs(path + folder_name)
+file_mappings = {
+    '.docx': 'docx files',
+    '.txt': 'text files',
+    '.xlsx': 'xlsx files',
+    '.pdf': 'pdf files',
+    '.jpg': 'images',
+}
 
 for file in file_names:
-    if '.docx' in file and not os.path.exists(path + 'docx files/' + file):
-        shutil.move(path + file, path + 'docx files/' + file)
-    elif '.txt' in file and not os.path.exists(path + 'text files/' + file):
-        shutil.move(path + file, path + 'text files/' + file)
-    elif '.xlsx' in file and not os.path.exists(path + 'xlsx files/' + file):
-        shutil.move(path + file, path + 'xlsx files/' + file)
+    file_ext = os.path.splitext(file)[1]
+    folder = file_mappings.get(file_ext)
+    if folder:
+        dest_dir = os.path.join(path, folder)
+        os.makedirs(dest_dir, exist_ok=True)
+
+        dest_file = os.path.join(dest_dir, file)
+        if os.path.exists(dest_file):
+            base, ext = os.path.splitext(file)
+            counter = 1
+
+            while True:
+
+                new_name = f"{base}_copy{counter}{ext}"
+                new_path = os.path.join(dest_dir, new_name)
+
+                if not os.path.exists(new_path):
+                    dest_file = new_path
+                    break
+
+                counter += 1
+
+        shutil.move(os.path.join(path, file), dest_file)
     else:
-        print('There are files that were not moved!')
+        print(f"Skipped: {file}")
